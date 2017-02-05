@@ -34,7 +34,7 @@
         }//end onNewSubmit
 
         function onEditButton(message) {
-          console.log('onEditButton');
+          console.log('onEditButtonClick');
           message.showEditForm = !message.showEditForm;
           vm.editableData = {
             id: message.id,
@@ -47,7 +47,12 @@
 
         function onUpdateSubmit(input) {
           console.log(input);
-          $http.patch(`/classifieds/${input.id}`, input).then((response)=>{
+          $http.patch(`/classifieds/${input.id}`, {
+            title: input.title,
+            description: input.description,
+            price: input.price,
+            item_image: input.item_image
+          }).then((response)=>{
             vm.getMessages();
           })
         }

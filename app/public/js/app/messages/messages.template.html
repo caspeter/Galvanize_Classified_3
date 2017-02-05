@@ -1,73 +1,91 @@
-<h2>New Classified</h2>
-<button type="button" name="openNewClassifiedForm" ng-click="$ctrl.newClassifiedButton = !$ctrl.newClassifiedButton">New Classified</button>
-<form ng-if="$ctrl.newClassifiedButton === true" ng-submit="$ctrl.onNewSubmit($ctrl.newClassified)">
-    <div>
-        <label for="title">Title:</label>
-        <input type="text" name="title" ng-model="$ctrl.newClassified.title">
-    </div>
-    <div>
-        <label for="description">Description:</label>
-        <input type="text" name="description" ng-model="$ctrl.newClassified.description">
-    </div>
-    <div>
-        <label for="price">Price:</label>
-        <input type="text" name="price" ng-model="$ctrl.newClassified.price">
-    </div>
-    <div>
-        <label for="item-image">Item Image URL:</label>
-        <input type="text" name="item-image" ng-model="$ctrl.newClassified.item_image">
-    </div>
-    <div>
-        <button type="submit">
+<div class="container">
+
+
+    <h2>Classifieds</h2>
+    <button type="button" name="openNewClassifiedForm" ng-click="$ctrl.newClassifiedButton = !$ctrl.newClassifiedButton" class="btn btn-default">New Classified</button>
+    <form novalidate name="$ctrl.newClassifiedForm" ng-if="$ctrl.newClassifiedButton === true" ng-submit="$ctrl.onNewSubmit($ctrl.newClassified)">
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" name="title" ng-model="$ctrl.newClassified.title" required>
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <input type="text" name="description" ng-model="$ctrl.newClassified.description" required>
+        </div>
+        <div>
+            <label for="price">Price:</label>
+            <input type="number" name="price" ng-model="$ctrl.newClassified.price" required>
+        </div>
+        <div>
+            <label for="item-image">Item Image URL:</label>
+            <input type="text" name="item-image" ng-model="$ctrl.newClassified.item_image" required>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-default" ng-disabled="$ctrl.newClassifiedForm.$invalid">
             Create Classified
           </button>
+        </div>
+    </form>
+
+    <hr>
+    <div class="input-group">
+        <input type="text" class="form-control" name="filter" ng-model="filterClassifieds" placeholder="Filter">
+        <div class="input-group-btn">
+            <button class="btn btn-default" ng-click="$ctrl.sortByThis = 'created_at'; $ctrl.sortOrder= true; "> Date </button>
+            <button class="btn btn-default" ng-click="$ctrl.sortByThis = 'price'; $ctrl.sortOrder= false; ">Price </button>
+        </div>
     </div>
-</form>
 
-<hr>
-<label for="filter">Filter:</label>
-<input type="text" name="filter" ng-model="filterClassifieds">
-<br>
-<form name="order-by">
-  <input type="radio" ng-click="$ctrl.sortByThis = 'created_at'; $ctrl.sortOrder= true; ">Date
-  <input type="radio" ng-click="$ctrl.sortByThis = 'price'; $ctrl.sortOrder= false; ">Price
-</form>
+    <hr>
+    <div class="row">
+        <div ng-repeat="message in $ctrl.messages | filter:filterClassifieds | orderBy: $ctrl.sortByThis : $ctrl.sortOrder">
 
-<hr>
-<div ng-repeat="message in $ctrl.messages | filter:filterClassifieds | orderBy: $ctrl.sortByThis : $ctrl.sortOrder">
 
-    <h2>{{message.title}}</h2>
-    <img ng-src="{{ message.item_image }}">
-    <p>{{ message.description }}</p>
-    <p>${{ message.price }}</p>
-    <span am-time-ago="message.created_at"></span>
-    <p><button type="button" name="edit-this-classified" ng-click=" $ctrl.onEditButton(message)">Edit</button></p>
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <img ng-src="{{ message.item_image }}" alt="{{message.title}}">
+                    <div class="caption">
+                        <h3>{{message.title}}</h3>
+                        <span am-time-ago="message.created_at"></span>
+                        <p>{{ message.description }}</p>
+                        <p>${{ message.price }}</p>
+                        <p><button type="button" name="edit-this-classified" ng-click=" $ctrl.onEditButton(message)" class="btn btn-default">Edit</button>
 
-    <div ng-if="message.showEditForm === true">
-      <form ng-submit="$ctrl.onUpdateSubmit($ctrl.editableData)">
-      <div>
-          <label for="title">Title:</label>
-          <input type="text" name="title" ng-model="$ctrl.editableData.title">
-      </div>
-      <div>
-          <label for="description">Description:</label>
-          <input type="text" name="description" ng-model="$ctrl.editableData.description">
-      </div>
-      <div>
-          <label for="price">Price:</label>
-          <input type="text" name="price" ng-model="$ctrl.editableData.price">
-      </div>
-      <div>
-          <label for="item-image">Item Image URL:</label>
-          <input type="text" name="item-image" ng-model="$ctrl.editableData.item_image">
-      </div>
-      <div>
-          <button type="submit">
+                            <button type="button" name="delete-this-classified" ng-click="$ctrl.deleteClassified(message.id)" class="btn btn-default">Delete</button></p>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div ng-if="message.showEditForm === true">
+                <form novalidate ng-submit="$ctrl.onUpdateSubmit($ctrl.editableData)" >
+                    <div>
+                        <label for="title">Title:</label>
+                        <input type="text" name="title" ng-model="$ctrl.editableData.title" required>
+                    </div>
+                    <div>
+                        <label for="description">Description:</label>
+                        <input type="text" name="description" ng-model="$ctrl.editableData.description" required>
+                    </div>
+                    <div>
+                        <label for="price">Price:</label>
+                        <input type="number" name="price" ng-model="$ctrl.editableData.price" required>
+                    </div>
+                    <div>
+                        <label for="item-image">Item Image URL:</label>
+                        <input type="text" name="item-image" ng-model="$ctrl.editableData.item_image" required>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-default">
                   Update Classified
                 </button>
-      </div>
-      </form>
-  </div>
-    <p><button type="button" name="delete-this-classified" ng-click="$ctrl.deleteClassified(message.id)">Delete</button></p>
+                    </div>
+                </form>
+            </div>
 
+
+        </div>
+    </div>
 </div>
