@@ -38,10 +38,9 @@
 
     <hr>
     <div class="row">
-        <div ng-repeat="message in $ctrl.messages | filter:filterClassifieds | orderBy: $ctrl.sortByThis : $ctrl.sortOrder">
+        <div class="col-sm-6 col-md-4" ng-repeat="message in $ctrl.messages | filter:filterClassifieds | orderBy: $ctrl.sortByThis : $ctrl.sortOrder">
 
-
-            <div class="col-sm-6 col-md-4">
+            <!-- <div > -->
                 <div class="thumbnail">
                     <img ng-src="{{ message.item_image }}" alt="{{message.title}}">
                     <div class="caption">
@@ -53,14 +52,48 @@
 
                             <button type="button" name="delete-this-classified" ng-click="$ctrl.deleteClassified(message.id)" class="btn btn-default">Delete</button></p>
                     </div>
+                    <div ng-if="message.showEditForm === true">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <form novalidate ng-submit="$ctrl.onUpdateSubmit($ctrl.editableData)">
+                                    <div>
+                                        <label for="title">Title:</label>
+                                        <input type="text" name="title" ng-model="$ctrl.editableData.title" required>
+                                    </div>
+                                    <div>
+                                        <label for="description">Description:</label>
+                                        <input type="text" name="description" ng-model="$ctrl.editableData.description" required>
+                                    </div>
+                                    <div>
+                                        <label for="price">Price:</label>
+                                        <input type="number" name="price" ng-model="$ctrl.editableData.price" required>
+                                    </div>
+                                    <div>
+                                        <label for="item-image">Item Image URL:</label>
+                                        <input type="text" name="item-image" ng-model="$ctrl.editableData.item_image" required>
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-default">
+                                Update Classified
+                              </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            <!-- </div> -->
 
 
 
 
-            <div ng-if="message.showEditForm === true">
-                <form novalidate ng-submit="$ctrl.onUpdateSubmit($ctrl.editableData)" >
+            <!-- <div ng-if="message.showEditForm === true">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Basic panel example
+                    </div>
+                </div>
+                <form novalidate ng-submit="$ctrl.onUpdateSubmit($ctrl.editableData)">
                     <div>
                         <label for="title">Title:</label>
                         <input type="text" name="title" ng-model="$ctrl.editableData.title" required>
@@ -83,7 +116,7 @@
                 </button>
                     </div>
                 </form>
-            </div>
+            </div> -->
 
 
         </div>
